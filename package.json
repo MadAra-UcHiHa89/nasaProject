@@ -4,8 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "install-server": "npm i --prefix server",
+    "install-client": "npm i --prefix client",
+    "install": "npm run install-server && npm run install-client",
+    "client": "npm start --prefix client",
+    "server": "npm run start --prefix server",
+    "watch": "npm run server & npm run client",
+    "deploy": "npm run build --prefix client && npm run start --prefix server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "morgan": "^1.10.0"
+  }
 }
