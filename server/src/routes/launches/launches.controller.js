@@ -3,6 +3,7 @@ const {
   addNewLaunch,
   abortLaunch,
   launchExists,
+  saveLaunch,
 } = require("../../model/launches.model");
 
 const upcomingLaunches = [];
@@ -19,8 +20,13 @@ function getUpcomingLaunches(req, res) {
   return res.status(200).json(upcomingLaunches);
 }
 
-function httpGetAllLaunches(req, res) {
-  return res.status(200).json(getAllLaunches());
+async function httpGetAllLaunches(req, res) {
+  try {
+    const launchesResult = await getAllLaunches();
+    return res.status(200).json(launchesResult);
+  } catch (err) {
+    return res.status(500).json({ error: "Error in fetching the launches" });
+  }
 }
 function httpAddNewLaunch(req, res) {
   console.log(req.body);
@@ -46,8 +52,9 @@ function httpAddNewLaunch(req, res) {
   }
 
   // This applis the isNaN function to the date.valueOf() method to check if the date is valid or not
-
-  addNewLaunch(launch);
+  console.log(launch);
+  // addNewLaunch(launch);
+  saveLaunch(launch);
   console.log("Launch added");
   return res.status(201).json(launch);
 }

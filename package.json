@@ -8,7 +8,7 @@
     "install-client": "npm i --prefix client",
     "install": "npm run install-server && npm run install-client",
     "client": "npm start --prefix client",
-    "server": "npm run start --prefix server",
+    "server": "npm run anyN --prefix server",
     "watch": "npm run server & npm run client",
     "deploy": "npm run build --prefix client && npm run start --prefix server",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,5 +17,8 @@
   "license": "ISC",
   "dependencies": {
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "jest": "^28.1.0"
   }
 }

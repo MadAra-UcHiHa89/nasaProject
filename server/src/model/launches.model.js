@@ -1,5 +1,6 @@
 const launches = new Map();
 //Created a hashmap for the launches , with key being the flight number and value being the launch object
+const launchesModel = require("./launches.mongo");
 
 let latestFlightNumber = 102;
 
@@ -44,13 +45,25 @@ function launchExists(launchId) {
   return launches.has(launchId);
 }
 
-function getAllLaunches() {
-  return Array.from(launches.values());
+async function getAllLaunches() {
+  return await launchesModel.find({}, { _id: 0, __v: 0 });
 }
 
-function addNewLaunch(launch) {
-  latestFlightNumber++;
+async function saveLaunch(launch) {
+  // If a launch with the current flightNumber exists in the databse then update the launch else create a new launch document
+  try {
+    await launchesModel.updateOne(
+      { flightNumber: launch.flightNumber },
+      launch,
+      { upsert: true }
+    );
+  } catch (err) {
+    console.log("Error in saving the launch" + err);
+  }
+}
 
+async function addNewLaunch(launch) {
+  latestFlightNumber++;
   launches.set(
     latestFlightNumber,
     Object.assign(launch, {
@@ -72,4 +85,10 @@ function abortLaunch(flightNumber) {
   return abortedLaunch;
 }
 
-module.exports = { getAllLaunches, addNewLaunch, launchExists, abortLaunch };
+module.exports = {
+  getAllLaunches,
+  addNewLaunch,
+  launchExists,
+  abortLaunch,
+  saveLaunch,
+};
