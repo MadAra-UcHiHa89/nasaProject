@@ -1,9 +1,9 @@
 const {
   getAllLaunches,
-  addNewLaunch,
   abortLaunch,
   launchExists,
   saveLaunch,
+  scheduleNewLaunch,
 } = require("../../model/launches.model");
 
 const upcomingLaunches = [];
@@ -21,8 +21,9 @@ function getUpcomingLaunches(req, res) {
 }
 
 async function httpGetAllLaunches(req, res) {
+  console.log(req.query);
   try {
-    const launchesResult = await getAllLaunches();
+    const launchesResult = await getAllLaunches(req.query);
     return res.status(200).json(launchesResult);
   } catch (err) {
     return res.status(500).json({ error: "Error in fetching the launches" });
@@ -52,22 +53,36 @@ function httpAddNewLaunch(req, res) {
   }
 
   // This applis the isNaN function to the date.valueOf() method to check if the date is valid or not
+  console.log("Before Mongoose mutates the launch object");
   console.log(launch);
   // addNewLaunch(launch);
-  saveLaunch(launch);
-  console.log("Launch added");
-  return res.status(201).json(launch);
+  const result = scheduleNewLaunch(launch);
+  console.log("After Mongoose mutates the launch object");
+  console.log(launch);
+  if (result) {
+    console.log("Launch added");
+    return res.status(201).json(launch);
+  } else {
+    console.log("Launch not added");
+    return res.status(500).json({ error: "Error in adding the launch" });
+  }
 }
 
-function httpAbortLaunch(req, res) {
+async function httpAbortLaunch(req, res) {
   const flightNumber = parseInt(req.params.id);
 
-  if (!launchExists(flightNumber)) {
+  const launchExistence = await launchExists(flightNumber);
+  if (!launchExistence) {
     return res.status(400).json({ error: "Launch does not exist" });
   }
-
-  const abortedLaunch = abortLaunch(flightNumber);
-  return res.status(200).json(abortedLaunch);
+  try {
+    const abortedLaunch = await abortLaunch(flightNumber);
+    console.log("Aborted Launch::");
+    console.log(abortedLaunch);
+    return res.status(200).json(abortedLaunch);
+  } catch (err) {
+    return res.status(500).json({ error: "Error in aborting the launch" });
+  }
 }
 
 module.exports = {

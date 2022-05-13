@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000"; // since the api's URL will be same just the endpoint will differ
+const API_URL = "http://localhost:8000/v1"; // since the api's URL will be same just the endpoint will differ
 
 async function httpGetPlanets() {
   // TODO: Once API is ready.

@@ -1,33 +1,18 @@
 const http = require("http");
-const mongoose = require("mongoose");
 const PORT = process.env.PORT || 8000;
 const express = require("express");
 const app = require("./app");
 const { loadPlanetsData } = require("./model/planets.model");
-
-const MONGO_URL =
-  "mongodb+srv://nasa-api:R0xezPEVK2OSUgES@nasaproject.pwxsh.mongodb.net/nasa?retryWrites=true&w=majority";
+const { loadLaunchesData } = require("./model/launches.model");
+const { connectToDB } = require("./services/mongo");
 
 const server = http.createServer(app);
 
-mongoose.connection.once("open", () => {
-  console.log("Server Connected to MongoDB");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.log("MongoDB connection error");
-  console.error(err);
-});
-
 const startServer = async () => {
   try {
-    await mongoose.connect(MONGO_URL, {
-      useNewUrlParser: true, // Determines how mongoose parse the url string we passed as first argument
-      // useFindAndModify: false, // This disables the outdated way of updating mongo data Determines if mongoose should use findOneAndUpdate or findOneAndReplace
-      // useCreateIndex: true, // Determines if mongoose should use createIndex instead of ensureIndex function
-      useUnifiedTopology: true, // Determines if mongoose should use the new topology I.E new way of talking to mongo clusters instead of old way
-    });
+    await connectToDB();
     await loadPlanetsData();
+    await loadLaunchesData(); // Loading the data from the SpaceX API and storing it in the database if that launch is not already there in the database i.e upsert
     server.listen(PORT, () => {
       console.log(`Listening at Port ${PORT}...`);
     });

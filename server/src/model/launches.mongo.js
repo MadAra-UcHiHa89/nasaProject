@@ -19,7 +19,7 @@ const launchesSchema = new mongoose.Schema({
   },
   target: {
     type: String,
-    required: true,
+    // required: true, since the spaceX API does not have this field
   },
   customers: [String], // Specifying the type of the array is an array of strings
   upcoming: {
