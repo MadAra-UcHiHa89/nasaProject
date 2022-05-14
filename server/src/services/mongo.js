@@ -9,9 +9,7 @@ mongoose.connection.on("error", (err) => {
   console.error(err);
 });
 
-const MONGO_URL =
-  "mongodb+srv://nasa-api:R0xezPEVK2OSUgES@nasaproject.pwxsh.mongodb.net/nasa?retryWrites=true&w=majority";
-
+const MONGO_URL = process.env.MONGO_URL;
 async function connectToDB() {
   await mongoose.connect(MONGO_URL, {
     useNewUrlParser: true, // Determines how mongoose parse the url string we passed as first argument

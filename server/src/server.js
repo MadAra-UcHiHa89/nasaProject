@@ -1,7 +1,9 @@
 const http = require("http");
+require("dotenv").config();
 const PORT = process.env.PORT || 8000;
 const express = require("express");
 const app = require("./app");
+
 const { loadPlanetsData } = require("./model/planets.model");
 const { loadLaunchesData } = require("./model/launches.model");
 const { connectToDB } = require("./services/mongo");
