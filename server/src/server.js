@@ -12,6 +12,7 @@ const server = http.createServer(app);
 
 const startServer = async () => {
   try {
+    console.log(process.env.MONGO_URL);
     await connectToDB();
     await loadPlanetsData();
     await loadLaunchesData(); // Loading the data from the SpaceX API and storing it in the database if that launch is not already there in the database i.e upsert

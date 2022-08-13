@@ -1,0 +1,22 @@
+name: NASA PROJECT CI #name of the workflow
+on: # When will the workflow we are defining will execute / run
+  push: #This workflow will be executed when code is pushed to the repo
+    branches: [master] # we have to specify the branches ,to which when code is pushed should the , workflow execute
+  pull_request: # #This workflow will be executed when there's a pull request
+    branches: [master] # we have to specify the branches ,to which when a pull request is created should the , workflow execute
+jobs: #The jobs that need to be performed when any of the above events occur
+  #name of the job
+  build:
+    #for each job we must specify the os , the job must run on  (the os of the server our backend is running on)
+    runs-on: ubuntu-latest # This build job will run on ubuntu-latest os
+    steps: # The steps => the tasks that  need to be performed sequentially ( one after another => first the checkout action wil be exeucte , then setup-node ...) when the job is executed
+      - uses: actions/checkout@v2 # This step will checkout the code from the repo, (We can use pre-existing actions i.e scripts that are already available in the actions repository, which will be exeucuted)
+      #we can even provide a name to the step
+      - name: Use Node js Version 16
+        uses: actions/setup-node@v2 # This step wil execute a pre-existing action, which will setup the node version to 16 on the machine our backend is running on
+        with: # We can be specific about the action , with the with property
+          node-version: 16 # We are specifying the node version to be 16
+          #Thus this whole step is , setting up the node version to 16 on the machine our backend is running on
+          # we can specify our own scripts we want to run using the run property
+      - run: npm install # This step will run the npm install command on the terminal of the machine our backend is running on
+      - run: npm run build --prefix client

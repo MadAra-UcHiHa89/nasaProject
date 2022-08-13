@@ -64,9 +64,9 @@ async function getAllLaunches(queryString) {
 
   return await launchesModel
     .find({}, { _id: 0, __v: 0 })
-    .sort({ flightNumber: 1 }) // Sorting the launches in ascending order wrt the flightNumber & then applying pagination i.e skipping & limiting
-    .skip(documentsToSkip)
-    .limit(limit);
+    .sort({ flightNumber: -1 }) // Sorting the launches in ascending order wrt the flightNumber & then applying pagination i.e skipping & limiting
+    .skip()
+    .limit(10);
 }
 
 async function getLatestFlightNumber() {
