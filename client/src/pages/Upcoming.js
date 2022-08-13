@@ -38,7 +38,7 @@ const Upcoming = (props) => {
           </tr>
         );
       });
-  }, [launches, abortLaunch, classes.link]);
+  }, [props, launches, classes.link, abortLaunch]);
 
   return (
     <Appear id="upcoming" animate show={entered}>
