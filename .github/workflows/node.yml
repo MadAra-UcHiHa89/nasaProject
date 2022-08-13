@@ -1,9 +1,9 @@
 name: NASA PROJECT CI #name of the workflow
 on: # When will the workflow we are defining will execute / run
   push: #This workflow will be executed when code is pushed to the repo
-    branches: [master] # we have to specify the branches ,to which when code is pushed should the , workflow execute
+    branches: [master, main] # we have to specify the branches ,to which when code is pushed should the , workflow execute
   pull_request: # #This workflow will be executed when there's a pull request
-    branches: [master] # we have to specify the branches ,to which when a pull request is created should the , workflow execute
+    branches: [master, main] # we have to specify the branches ,to which when a pull request is created should the , workflow execute
 jobs: #The jobs that need to be performed when any of the above events occur
   #name of the job
   build:
@@ -18,5 +18,5 @@ jobs: #The jobs that need to be performed when any of the above events occur
           node-version: 16 # We are specifying the node version to be 16
           #Thus this whole step is , setting up the node version to 16 on the machine our backend is running on
           # we can specify our own scripts we want to run using the run property
-      - run: npm install # This step will run the npm install command on the terminal of the machine our backend is running on
+      - run: npm install # This step will run the npm install command on the terminal of the machine our backend is running on .
       - run: npm run build --prefix client
